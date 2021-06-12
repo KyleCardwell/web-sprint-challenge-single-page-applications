@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+/* ---------- MY CSS Styles ---------- */
+
+.formContainer {
+  width: 80%;
+  margin: auto;
+}
+
+.sectionTitle {
+  background-color: gray;
+  padding: 5px;
+}
+
+.sauces {
+  display: flex;
+  flex-direction: column;
+}
+
+.toppings {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.eachTopping {
+  width: 45%;
+  margin: 5px auto;
+}
