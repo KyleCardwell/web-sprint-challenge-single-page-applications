@@ -1,24 +1,41 @@
 import React from 'react'
-import { pizzaSauce, pizzaToppings, pizzaSizes } from './pizzaOptions'
 import '../App.css'
 
 
 export default function PizzaForm(props) {
 
+    const { pizzaSauce, pizzaToppings, pizzaSizes, change, submit } = props
+
+    const onSubmit = evt => {
+        evt.preventDefault()
+        submit()
+    }
+
     return (
         <div className="formContainer">
-            <form>
+            <form id="pizza-form">
                 <h3>Build Your Own Pizza</h3>
                 <section>
-                <div className="sectionTitle">
+                    <div className="sectionTitle">
+                        <h4>What's your name?</h4>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="text" placeholder="Enter your name here" id="order-name"/>
+                        </label>
+                    </div>
+                </section>
+                
+                <section>
+                    <div className="sectionTitle">
                         <h4>Choice of Size</h4>
                         <p>Required</p>
                     </div>
                     <div>
-                        <select>
+                        <select id="size-dropdown">
                             <option>Select</option>
                             {pizzaSizes.map(size =>
-                                <option>{size}</option>
+                                <option key={size}>{size}</option>
                             )}
                         </select>
                     </div>
@@ -31,7 +48,7 @@ export default function PizzaForm(props) {
                     </div>
                     <div className="sauces">
                         {pizzaSauce.map(sauce => 
-                            <label><input type="radio" name="sauceChoice"/>{sauce}</label>
+                            <label key={sauce}><input type="radio" name="sauceChoice"/>{sauce}</label>
                         )}
 
                     </div>
@@ -44,10 +61,41 @@ export default function PizzaForm(props) {
                     </div>
                     <div className="toppings">
                         {pizzaToppings.map(topping =>
-                            <label className="eachTopping"><input type="checkbox"/>{topping}</label>
+                            <label key={topping.toppingName} className="eachTopping">
+                                <input
+                                    type="checkbox"
+                                    checked={topping.ischecked}
+                                    onChange={change}
+                                    name={topping.toppingName}
+                                />{topping.toppingName}</label>
                         )}
                     </div>
                 </section>
+                <section>
+                    <div className="sectionTitle">
+                        <h4>Choice of Substitute</h4>
+                        <p>Choose up to 1</p>
+                    </div>
+                    <div>
+                        <label><input type="checkbox"/>Gluten-free Crust (Add $1)</label>
+                    </div>
+                </section>
+
+                <section>
+                    <div className="sectionTitle">
+                        <h4>Special Instructions</h4>
+                    </div>
+                    <div>
+                        <label><input className="specialInstructions" type="text" placeholder="Anything else you'd like to add?" id="special-text"/></label>
+                    </div>
+                </section>
+
+                <section>
+                    <div className="sectionTitle">
+                        <button type="submit" onSubmit={onSubmit} id="order-button">Submit Order</button>
+                    </div>
+                </section>
+
 
             </form>
         </div>

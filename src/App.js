@@ -1,11 +1,98 @@
-import React from "react";
+import React, { useState } from "react";
 import PizzaForm from "./Components/PizzaForm";
+import PizzaNav from "./Components/PizzaNav";
+import PizzaHome from './Components/PizzaHome'
+import { useRouteMatch, Route, Link, Switch } from "react-router";
+
+import { pizzaSauce, pizzaToppings, pizzaSizes } from './Components/pizzaOptions'
+import axios from "axios";
+
 
 const App = () => {
+
+  // const toppingsList = pizzaToppings.map(topping => {
+  //   return [`'${topping}'`, false]
+  // })
+
+  // const newToppingsList = Object.fromEntries(toppingsList)  
+
+  // console.log(newToppingsList)
+
+  const initialFormValues = {
+    orderName: "",
+    size: "",
+    sauce: "",
+    pizzaToppings,
+    substitute: false,
+    special: "",
+  }
+
+  const [sauceChoice, setSauceChoice] = useState(pizzaSauce)
+  const [toppingsChoice, setToppingChoice] = useState(initialFormValues.pizzaToppings)
+  const [sizeChoice, setSizeChoice] = useState(pizzaSizes)
+  const [formValues, setFormValues] = useState(initialFormValues)
+  const [orders, setOrders] = useState([])
+
+  console.log(formValues)
+
+  const inputChange = (evt) => {
+    const { name, value, checked, type } = evt.target
+
+    console.log(evt)
+
+    // const indexOfTopping = pizzaToppings.findIndex(i => name === i.toppingName)
+    
+    const newPizzaToppings = pizzaToppings.map(topping => {
+      if(name === topping.toppingName) {
+        topping.ischecked = checked
+      }
+      return topping
+    })
+    // console.log(indexOfTopping)
+
+    setFormValues({...formValues, pizzaToppings: newPizzaToppings})
+    
+    // console.log(formValues)
+  }
+
+  const postNewOrder = newOrder => {
+    axios
+      .post('https://reqres.in/api/orders', newOrder)
+      .then(res => {
+        setOrders(...orders, newOrder)
+        console.log("did this post?", orders)
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        setFormValues(initialFormValues)
+      })
+  }
+
+  const formSubmit = () => {
+    const newOrder = {
+      orderName: formValues.orderName,
+      size: formValues.size,
+      sauce: formValues.sauce,
+      pizzaToppings: formValues.pizzaToppings,
+      substitute: formValues.substitute,
+      special: formValues.special,
+    }
+
+    postNewOrder(newOrder)
+  }
+
+
   return (
     <>
-      <h1>Lambda Eats</h1>
-      <PizzaForm />
+      <PizzaNav />
+
+      <Route exact path="/">
+        <PizzaHome />
+      </Route>
+
+      <Route path="/pizza">
+        <PizzaForm pizzaSauce={sauceChoice} pizzaToppings={formValues.pizzaToppings} pizzaSizes={sizeChoice} change={inputChange} submit={formSubmit}/>
+      </Route>
     </>
   );
 };
