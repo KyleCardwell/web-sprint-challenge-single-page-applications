@@ -7,6 +7,9 @@ import { useRouteMatch, Route, Link, Switch } from "react-router";
 import { pizzaToppings } from './Components/pizzaOptions'
 import axios from "axios";
 
+import * as yup from 'yup'
+import schema from './Validation/formSchema'
+
 
 const App = () => {
 
@@ -17,6 +20,7 @@ const App = () => {
   // const newToppingsList = Object.fromEntries(toppingsList)  
 
   // console.log(newToppingsList)
+  const API_URL = 'https://reqres.in/api/orders'
 
   const initialFormValues = {
     orderName: "",
@@ -27,8 +31,15 @@ const App = () => {
     special: "",
   }
 
+  const initialFormErrors = {
+    orderName: "",
+    pizzaToppings,
+  }
+
   const [formValues, setFormValues] = useState(initialFormValues)
   const [orders, setOrders] = useState([])
+  const [formErrors, setFormErrors] = useState(initialFormErrors)
+  const [disabled, setDisabled] = useState()
 
 
   // ---------- TOPPINGS SELECTION CHANGES ----------
@@ -49,19 +60,28 @@ const App = () => {
   }
 
   const inputChange = evt => {
+
     const { name, value } = evt.target
+
+    yup.reach(schema, name)
+    .validate(value)
+    .then(() => {
+      setFormErrors({...formErrors, [name]: "" })
+    })
+    .catch(err => {
+      setFormErrors({...formErrors, [name]: err.message})
+    })
+
     setFormValues({...formValues, [name]: value})
-    console.log("Name:", name, "Value:", value)
-    console.log(formValues)
 
   }
 
   const postNewOrder = newOrder => {
     axios
-      .post('https://reqres.in/api/orders', newOrder)
+      .post(API_URL, newOrder)
       .then(res => {
-        setOrders(...orders, newOrder)
-        console.log("did this post?", orders)
+        // setOrders(...orders, newOrder)
+        console.log(res)
       })
       .catch(err => console.log(err))
       .finally(() => {
@@ -101,6 +121,7 @@ const App = () => {
           toppingChange={toppingChange}
           change={inputChange}
           submit={formSubmit}
+          errors={formErrors}
         />
       </Route>
     </>

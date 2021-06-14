@@ -99,3 +99,7 @@ a {
   height: 100px;
   word-wrap: wrap;
 }
+
+.errors {
+  color: red;
+}

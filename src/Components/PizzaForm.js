@@ -6,7 +6,7 @@ import { pizzaSauce, pizzaSizes } from './pizzaOptions'
 
 export default function PizzaForm(props) {
 
-    const { pizzaToppings, change, toppingChange, submit, selectedSize, values } = props
+    const { pizzaToppings, change, toppingChange, submit, values, errors } = props
 
     const onSubmit = evt => {
         evt.preventDefault()
@@ -20,13 +20,14 @@ export default function PizzaForm(props) {
                 <section>
                     <div className="sectionTitle">
                         <h4>What's your name?</h4>
+                        <div className="errors"> {errors.orderName}</div>
                     </div>
                     <div>
                         <label>
                             <input
                                 type="text"
                                 placeholder="Enter your name here"
-                                id="order-name"
+                                id="name-input"
                                 name="orderName"
                                 value={values.orderName}
                                 onChange={change}/>
