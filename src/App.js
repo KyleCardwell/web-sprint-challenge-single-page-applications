@@ -4,7 +4,7 @@ import PizzaNav from "./Components/PizzaNav";
 import PizzaHome from './Components/PizzaHome'
 import { useRouteMatch, Route, Link, Switch } from "react-router";
 
-import { pizzaSauce, pizzaToppings, pizzaSizes } from './Components/pizzaOptions'
+import { pizzaToppings } from './Components/pizzaOptions'
 import axios from "axios";
 
 
@@ -27,18 +27,13 @@ const App = () => {
     special: "",
   }
 
-  const [sauceChoice, setSauceChoice] = useState(pizzaSauce)
-  const [toppingsChoice, setToppingChoice] = useState(initialFormValues.pizzaToppings)
-  const [sizeChoice, setSizeChoice] = useState(pizzaSizes)
   const [formValues, setFormValues] = useState(initialFormValues)
   const [orders, setOrders] = useState([])
 
-  console.log(formValues)
 
-  const inputChange = (evt) => {
-    const { name, value, checked, type } = evt.target
-
-    console.log(evt)
+  // ---------- TOPPINGS SELECTION CHANGES ----------
+  const toppingChange = (evt) => {
+    const { name, checked } = evt.target
 
     // const indexOfTopping = pizzaToppings.findIndex(i => name === i.toppingName)
     
@@ -48,11 +43,17 @@ const App = () => {
       }
       return topping
     })
-    // console.log(indexOfTopping)
 
     setFormValues({...formValues, pizzaToppings: newPizzaToppings})
-    
-    // console.log(formValues)
+  
+  }
+
+  const inputChange = evt => {
+    const { name, value } = evt.target
+    setFormValues({...formValues, [name]: value})
+    console.log("Name:", name, "Value:", value)
+    console.log(formValues)
+
   }
 
   const postNewOrder = newOrder => {
@@ -91,7 +92,16 @@ const App = () => {
       </Route>
 
       <Route path="/pizza">
-        <PizzaForm pizzaSauce={sauceChoice} pizzaToppings={formValues.pizzaToppings} pizzaSizes={sizeChoice} change={inputChange} submit={formSubmit}/>
+        <PizzaForm
+          // myOrderName={formValues.orderName}
+          // sauce={formValues.sauce}
+          values={formValues}
+          pizzaToppings={formValues.pizzaToppings}
+          // selectedSize={formValues.size}
+          toppingChange={toppingChange}
+          change={inputChange}
+          submit={formSubmit}
+        />
       </Route>
     </>
   );
