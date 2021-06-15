@@ -76,16 +76,17 @@ const App = () => {
 
   }
 
-  const postNewOrder = newOrder => {
+  const postNewOrder = (newOrder) => {
     axios
       .post(API_URL, newOrder)
       .then(res => {
-        // setOrders(...orders, newOrder)
-        console.log(res)
+        setOrders([...orders, newOrder])
+        console.log(orders)
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log("is this working?", err))
       .finally(() => {
         setFormValues(initialFormValues)
+        console.log("form values now", formValues)
       })
   }
 
@@ -98,6 +99,7 @@ const App = () => {
       substitute: formValues.substitute,
       special: formValues.special,
     }
+    console.log(newOrder)
 
     postNewOrder(newOrder)
   }

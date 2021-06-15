@@ -13,6 +13,8 @@ const schema = yup.object().shape({
         .required(),
     pizzaToppings: yup
         .array(),
+    special: yup
+        .string()
 
 })
 

@@ -8,7 +8,7 @@ export default function PizzaForm(props) {
 
     const { pizzaToppings, change, toppingChange, submit, values, errors } = props
 
-    const onSubmit = evt => {
+    const orderSubmit = evt => {
         evt.preventDefault()
         submit()
     }
@@ -115,7 +115,7 @@ export default function PizzaForm(props) {
 
                 <section>
                     <div className="sectionTitle">
-                        <button type="submit" onSubmit={onSubmit} id="order-button">Submit Order</button>
+                        <button type="submit" onClick={orderSubmit} id="order-button">Submit Order</button>
                     </div>
                 </section>
 
